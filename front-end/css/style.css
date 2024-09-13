@@ -1,1 +1,115 @@
- 
+/* Container for dev-items and collection-section */
+.container {
+    display: flex;
+    justify-content: flex-start; /* Aligns items to the left */
+    align-items: flex-start;     /* Aligns items vertically */
+    gap: 20px;                   /* Adds space between items */
+}
+
+.dev-items {
+    display: flex;
+    flex-direction: column; /* Arrange items in a column */
+    align-items: left;    /* Center the images horizontally */
+    width: 60px;
+}
+
+.dev-items img {
+    margin-bottom: 10px; /* Add space between the images */
+}
+
+.user-logo {
+    position: fixed;
+    bottom: 20px;   /* Adjust this value to change the distance from the bottom */
+    left: 20px;     /* Adjust this value to change the distance from the left */
+}
+
+.user-logo img {
+    width: 50px;   /* Adjust size as needed */
+    height: 50px;  /* Ensure height is the same as width to make it a circle */
+    border-radius: 50%;  /* Makes the image circular */
+    object-fit: cover;   /* Ensures the image fits the container without distortion */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* Optional: Add shadow for better visual */
+}
+
+
+/* Collection section beside dev-items */
+.collection-section {
+    border: 2px solid #000;  /* Adds a black border */
+    padding: 20px;           /* Adds padding inside the border */
+    width: 160px;            /* Set a width, adjust as needed */
+    height: 850px;            /* Set height if needed, or leave as auto */
+    background-color: #f9f9f9; /* Optional: background color */
+   
+}
+
+.search-bar {
+    border: 2px solid #000;      /* Border same size as collection-section */
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;      /* Ensures padding doesn't affect width */
+    margin-bottom: 15px;         /* Adds space below the search bar */
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 5px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+
+
+
+
+/* Users div inside Collections div */
+.users {
+    background-color: grey;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.users img {
+    width: 30px;
+    height: 30px;
+}
+
+.users .text {
+    font-size: 16px;
+    color: white;
+}
+
+.new-collection-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: white;
+    border: 2px solid #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.new-collection-btn img {
+    width: 20px;
+    height: 20px;
+}
+
+.new-collection-btn span {
+    font-size: 16px;
+    color: black;
+}
+
+/* Hover effects */
+.search-bar:hover,
+.collections:hover,
+.users:hover,
+.new-collection-btn:hover {
+    background-color: lightgrey;
+}

@@ -1,1 +1,6 @@
-"# PocketBaseUI_with_mongoDB" 
+#PocketBaseUI_with_mongoDB
+
+
+> okay so I fell in love with the pocketbase UI and wanted to recreate it so it would work mongodb
+> yes i know mongo has it on GUI called compass...
+> but still i wanted to try and recreate the UI ...

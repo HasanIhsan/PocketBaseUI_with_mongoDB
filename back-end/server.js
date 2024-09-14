@@ -79,6 +79,45 @@ app.get('/get-all-collections', async (req, res) => {
     }
 });
  
+
+//* get current seleteced collection data
+app.get('/get-collection-data', async (req, res) => {
+
+    const collectionName = req.query.collectionName;
+
+    if (!collectionName) {
+        return res.status(400).json({ error: 'Collection name is required' });
+    }
+
+    try {
+
+        //? Connect to db
+        if(!db) await connectToDB();
+
+        //? Check if collection exists
+        const collectionExists = await db.listCollections({ name: collectionName }).hasNext();
+        if (!collectionExists) {
+            return res.status(404).json({ error: 'Collection not found' });
+        }
+
+        //? Get all documents from the selected collection
+        const collection = db.collection(collectionName);
+        const documents = await collection.find().toArray();
+
+        //? Send the documents as a response
+        res.json({ data: documents });
+
+         
+    }catch(error) {
+        console.error('Error fetching colections:', error);
+        console.info('Error fetching colections:', error);
+        res.status(500).json({error: 'failed to get collections', error});
+    }
+
+});
+
+
+
 app.listen(port, () => {
   console.log(`Proxy server running at http://localhost:${port}`);
 });

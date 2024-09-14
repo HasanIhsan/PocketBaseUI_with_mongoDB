@@ -9,7 +9,13 @@ require('dotenv').config()
 
 
 const mongoURI = process.env.CONNECTION_STRING;
-const client = new MongoClient(mongoURI, {useNewUrlParser: true, useUnifiedTopology:true});
+const client = new MongoClient(uri, {
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
+    }
+  });
 
 app.use(cors());
 app.use(express.json());

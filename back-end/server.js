@@ -9,7 +9,7 @@ require('dotenv').config()
 
 
 const mongoURI = process.env.CONNECTION_STRING;
-const client = new MongoClient(uri, {
+const client = new MongoClient(mongoURI, {
     serverApi: {
       version: ServerApiVersion.v1,
       strict: true,

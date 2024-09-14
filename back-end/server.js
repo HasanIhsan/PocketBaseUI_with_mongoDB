@@ -1,5 +1,5 @@
 const express = require('express');
-const {MongoClient, ObjectId} = require('mongodb');
+const {MongoClient, ObjectId,  ServerApiVersion} = require('mongodb');
 const cors = require('cors');
 const app = express();
 const port = 3000;
@@ -7,6 +7,7 @@ const port = 3000;
 
 require('dotenv').config()
 
+let db;
 
 const mongoURI = process.env.CONNECTION_STRING;
 const client = new MongoClient(mongoURI, {
@@ -15,7 +16,7 @@ const client = new MongoClient(mongoURI, {
       strict: true,
       deprecationErrors: true,
     }
-  });
+});
 
 app.use(cors());
 app.use(express.json());
@@ -56,6 +57,27 @@ app.get('/', (req, res) => {
 });
 
 
+//*get all collections (tables)!
+app.get('/get-all-collections', async (req, res) => {
+
+   
+    try {
+
+        //? Connect to MongoDB if not already connected
+        if (!db) await connectToDB();
+
+        //? Get all Collections (tables)
+        const collections = await db.listCollections().toArray();
+
+        //? Send collection data as json
+        res.json(collections);
+
+    }catch(error) {
+        console.error('Error fetching colections:', error);
+        console.info('Error fetching colections:', error);
+        res.status(500).json({error: 'failed to get collections', error});
+    }
+});
  
 app.listen(port, () => {
   console.log(`Proxy server running at http://localhost:${port}`);

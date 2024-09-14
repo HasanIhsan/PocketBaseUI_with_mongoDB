@@ -1,56 +1,77 @@
- <!DOCTYPE html>
- <html lang="en">
- <head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PocketBase UI</title>
     <link rel="stylesheet" href="./css/style.css">
-
-    <title>PBMONGO</title>
- </head>
- <body>
-    
-
-    <div class="container">
-        <div class="dev-items"> 
-            <img  src="./Assets/images/pb-logo.png" alt="pb-logo">
-            <img src="./Assets/images/database.png" alt="database-logo">
-            <img src="./Assets/images/logs.png" alt="logs-logo">
-            <img src="./Assets/images/settings.png" alt="setting-logo">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <img src="./Assets/images/pb-logo.png" alt="Logo">
         </div>
-
-
-        <div class="user-logo">
-            <img src="./Assets/images/cat-logo.jfif" alt="cat-logo">
-        </div>
-
-        <section class="collection-section">
-            <div class="search-bar">
-                <input type="text" placeholder="Search collections">
-            </div>
-            
-            <div class="collections">
-                 
-                
-                <!-- Users div inside Collections div -->
-                <div class="users">
-                    <img src="./Assets/images/users.png" alt="users-image">
-                    <span class="text">Users</span>
-                </div>
-            </div>
-            
-            <button class="new-collection-btn">
-                <img src="./Assets/images/plus-sign.png" alt="plus-sign">
-                <span>New Collection</span>
-            </button>
-        </section>
+        <div class="menu-item" id="users">users</div>
+        <div class="menu-item" id="teste">Teste</div>
+        <div class="menu-item" id="messages">messages</div>
+        <div class="menu-item" id="posts">posts</div>
+        <div class="menu-item" id="messagesReport">messagesReport</div>
+        <button class="new-collection">+ New collection</button>
     </div>
 
-    
+    <div class="main-content">
+        <div class="top-bar">
+            <h2>Collections / users</h2>
+            <button>API Preview</button>
+            <button>New record</button>
+        </div>
 
+        <div class="content-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>username</th>
+                        <th>email</th>
+                        <th>name</th>
+                        <th>avatar</th>
+                        <th>created</th>
+                        <th>updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>JJ2YRU30FBG8MqX</td>
+                        <td>u_fY6TDdqL6JEG4xu</td>
+                        <td>test3@example.com</td>
+                        <td>John Doe</td>
+                        <td>N/A</td>
+                        <td>2022-07-02 07:51:26 UTC</td>
+                        <td>2022-07-02 07:51:26 UTC</td>
+                    </tr>
+                    <tr>
+                        <td>qEooBTHoAGkWUKc</td>
+                        <td>u_Gq7dcZKjM9v2Sgv</td>
+                        <td>test2@example.com</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>2022-07-02 07:51:05 UTC</td>
+                        <td>2022-10-02 22:23:33 UTC</td>
+                    </tr>
+                    <tr>
+                        <td>eP2jCr1h3NGtsbz</td>
+                        <td>u_GpYUPiMQEzHCNnt</td>
+                        <td>test@example.com</td>
+                        <td>Jane Doe</td>
+                        <td><img src="path/to/avatar.jpg" alt="Jane Doe"></td>
+                        <td>2022-07-02 07:49:01 UTC</td>
+                        <td>2022-10-02 22:23:42 UTC</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    
-
-
-   
- </body>
- </html>
+    <script src="./js/script.js"></script>
+</body>
+</html>

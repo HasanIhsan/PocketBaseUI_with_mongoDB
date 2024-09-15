@@ -9,10 +9,21 @@
 <body>
      <!-- Right vertical toolbar -->
      <div class="toolbar"> 
+       
         <img src="./Assets/images/pb-logo.png" alt="Logo">
-        <img src="./Assets/images/database.png" alt="Logo">
-        <img src="./Assets/images/logs.png" alt="Refresh">
-        <img src="./Assets/images/settings.png" alt="Settings">
+        <div class="image-container">
+            <img src="./Assets/images/database.png" alt="Database">
+            <span class="hover-label">Collections</span>
+        </div>
+        <div class="image-container">
+            <img src="./Assets/images/logs.png" alt="Logs">
+            <span class="hover-label">Logs</span>
+        </div>
+        <div class="image-container">
+            <img src="./Assets/images/settings.png" alt="Settings">
+            <span class="hover-label">Settings</span>
+        </div>
+      
         <img class="logout" src="./Assets/images/cat-logo.jfif" alt="Logout">
     </div>
 
@@ -52,8 +63,17 @@
     <div class="main-content">
         <div class="top-bar">
             <h2>Collections / users</h2>
-            <img src="./Assets/images/settings-gear-icon.png" alt="settings Gear">
-            <img src="./Assets/images/refersh-icon.png" alt="Refresh Icon">
+            <div class="image-container">
+                <img src="./Assets/images/settings-gear-icon.png" alt="settings Gear">
+                <span class="hover-label">Edit Collection</span>
+            </div>
+    
+            <div class="image-container">
+                <img src="./Assets/images/refersh-icon.png" alt="Refresh Icon">
+                <span class="hover-label">Refresh</span>
+    
+            </div>
+           
              
             <div class="actions">
                 <button class="api-preview-btn">"<\>" API Preview</button>

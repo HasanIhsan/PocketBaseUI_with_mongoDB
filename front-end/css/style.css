@@ -101,7 +101,7 @@ body {
 }
 
 .logout {
-    margin-top: 35rem;
+    margin-top: 28rem;
     border-radius: 50%;
 }
 
@@ -139,7 +139,7 @@ body {
 .top-bar img:hover {
     border-radius: 50px;
     background-color: #007bff;
-    opacity: 1;
+     
 }
 
  
@@ -263,6 +263,41 @@ tbody td:last-child img {
 }
 
 
+/* css for image hover lable*/
+.image-container {
+    position: relative;
+    display: inline-block;
+   
+}
+
+.image-container img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.hover-label {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 100%; /* Aligns the label to the right of the image */
+    transform: translateY(-50%);
+    margin-left: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    font-size: 14px;
+}
+
+.image-container:hover .hover-label {
+    visibility: visible;
+    opacity: 1;
+}
+/*-----------------------------------------------*/
 /* Footer */
 .footer {
     margin-top: 20px;

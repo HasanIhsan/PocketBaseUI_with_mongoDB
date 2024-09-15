@@ -46,3 +46,5 @@ deleteButton.addEventListener('click', function() {
     selectedCheckboxes.forEach(checkbox => checkbox.checked = false);
     updateDeleteBar(); // Hide the bar after deletion
 });
+
+ 

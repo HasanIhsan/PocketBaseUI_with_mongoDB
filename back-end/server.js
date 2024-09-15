@@ -22,7 +22,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 
-//*Connect to MongoDb
+//!Connect to MongoDb
 client.connect(err => {
     if(err){
         console.error('Failed to connect to Mongo', err);
@@ -32,7 +32,7 @@ client.connect(err => {
 });
 
 
-//*connect to DB
+//!connect to DB
 //TODO: modify this so the Db is connecting to can be changed!
 //TODO: currently it is hardcoded to connect to NLIC_DATABASE
 async function connectToDB() {
@@ -50,14 +50,14 @@ async function connectToDB() {
   }
 
 
-//*health check
+//!health check
 app.get('/', (req, res) => {
     res.send("App is running... v1.0.0");
     
 });
 
 
-//*get all collections (tables)!
+//!get all collections (tables)!
 app.get('/get-all-collections', async (req, res) => {
 
    
@@ -80,7 +80,7 @@ app.get('/get-all-collections', async (req, res) => {
 });
  
 
-//* get current seleteced collection data
+//! get current seleteced collection data
 app.get('/get-collection-data', async (req, res) => {
 
     const collectionName = req.query.collectionName;

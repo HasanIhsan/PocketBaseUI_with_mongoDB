@@ -4,6 +4,9 @@ let selectedCollection = "";
 function setSelectedCollection(collectionName) {
     selectedCollection = collectionName;
     console.log("Selected Collection: ", selectedCollection); //* For debugging
+
+    
+    fetchAndDisplaySelectedCollectionData(selectedCollection);
 }
 
 //! Function to fetch and display collections
@@ -52,7 +55,30 @@ function fetchAndDisplayCollections() {
     });
 }
 
+//! Function to fetch and display the selected collection data
+function fetchAndDisplaySelectedCollectionData(collectionName) {
+    //* Check if a collectionName is provided
+    if (!collectionName) {
+        console.error('No collection selected');
+        return;
+    }
 
+    //* Fetch data from the backend for the selected collection
+    fetch(`http://localhost:3000/get-collection-data?collectionName=${collectionName}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch collection data');
+            }
+            return response.json();
+        })
+        .then(data => {
+            //* Log the fetched data (you will implement display later)
+            console.log(`Data for collection: ${collectionName}`, data);
+        })
+        .catch(error => {
+            console.error('Error fetching collection data:', error);
+    });
+}
  
 
 //* Call the function when the page loads

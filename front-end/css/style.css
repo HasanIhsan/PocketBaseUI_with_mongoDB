@@ -298,6 +298,39 @@ tbody td:last-child img {
     opacity: 1;
 }
 /*-----------------------------------------------*/
+
+/* Style for the bottom delete bar */
+#delete-bar {
+display: none; /* Hidden by default */
+position: fixed;
+bottom: 0;
+left: 0;
+width: 100%;
+background-color: #f44336;
+color: white;
+padding: 15px;
+box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+text-align: center;
+font-size: 16px;
+z-index: 9999;
+}
+
+#delete-bar button {
+background-color: #fff;
+color: #f44336;
+border: none;
+padding: 10px 20px;
+cursor: pointer;
+float: right;
+border-radius: 5px;
+font-weight: bold;
+}
+
+#delete-bar button:hover {
+background-color: #f1f1f1;
+}
+/*---------------------------------*/
+
 /* Footer */
 .footer {
     margin-top: 20px;

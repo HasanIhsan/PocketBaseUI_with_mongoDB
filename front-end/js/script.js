@@ -1,12 +1,22 @@
-const menuItems = document.querySelectorAll('.menu-item');
+const menuContainer = document.getElementById('collections-menu');
 
-menuItems.forEach(item => {
-    item.addEventListener('click', function () {
-        menuItems.forEach(i => i.classList.remove('active'));
-        this.classList.add('active');
-    });
+//! Function to add 'active' class and remove from others
+function handleMenuItemClick(event) {
+    const menuItems = menuContainer.querySelectorAll('.menu-item');
+
+    //* Remove 'active' class from all items
+    menuItems.forEach(item => item.classList.remove('active'));
+
+    //* Add 'active' class to clicked item
+    event.currentTarget.classList.add('active');
+}
+
+//! Add event listeners for the dynamically created menu items
+menuContainer.addEventListener('click', (event) => {
+    if (event.target.closest('.menu-item')) {
+        handleMenuItemClick(event);
+    }
 });
-
 
 //* Get all checkboxes and the delete bar elements
 const checkboxes = document.querySelectorAll('.record-checkbox');
@@ -14,7 +24,7 @@ const deleteBar = document.getElementById('delete-bar');
 const selectedCountSpan = document.getElementById('selected-count');
 const deleteButton = document.getElementById('delete-button');
 
-//? Function to update the delete bar based on selected checkboxes
+//! Function to update the delete bar based on selected checkboxes
 function updateDeleteBar() {
     const selectedCheckboxes = document.querySelectorAll('.record-checkbox:checked');
     const numSelected = selectedCheckboxes.length;
@@ -29,7 +39,7 @@ function updateDeleteBar() {
     }
 }
 
-//* Add event listeners to all checkboxes
+//! Add event listeners to all checkboxes
 checkboxes.forEach(checkbox => {
     checkbox.addEventListener('change', updateDeleteBar);
 });

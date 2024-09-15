@@ -1,6 +1,12 @@
 let selectedCollection = "";
 
-//? Function to fetch and display collections
+//! Function to set the selected collection
+function setSelectedCollection(collectionName) {
+    selectedCollection = collectionName;
+    console.log("Selected Collection: ", selectedCollection); //* For debugging
+}
+
+//! Function to fetch and display collections
 function fetchAndDisplayCollections() {
     //* Fetch collections from the backend
     fetch('http://localhost:3000/get-all-collections')  
@@ -19,7 +25,6 @@ function fetchAndDisplayCollections() {
                 collectionDiv.className = 'menu-item';
                 collectionDiv.id = collection.name; //? Set the collection name as the ID
             
-                
                 //* Create the image element
                 const imgElement = document.createElement('img');
                 imgElement.src = './Assets/images/folder-icon.png'; //? Set your icon path
@@ -34,12 +39,21 @@ function fetchAndDisplayCollections() {
 
                 //* Append the collection div to the menu container
                 menuContainer.appendChild(collectionDiv);
+
+                //* Add event listener to the dynamically created menu-item
+                collectionDiv.addEventListener('click', function () {
+                    //* Set the selected collection
+                    setSelectedCollection(collection.name);
+                });
             });
         })
         .catch(error => {
             console.error('Error fetching collections:', error);
-        });
+    });
 }
+
+
+ 
 
 //* Call the function when the page loads
 window.onload = fetchAndDisplayCollections;

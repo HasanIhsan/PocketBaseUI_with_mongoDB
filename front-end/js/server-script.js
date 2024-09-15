@@ -1,18 +1,19 @@
 let selectedCollection = "";
+let apiUrl = "http://localhost:3000";
 
 //! Function to set the selected collection
 function setSelectedCollection(collectionName) {
     selectedCollection = collectionName;
     console.log("Selected Collection: ", selectedCollection); //* For debugging
 
-    
+
     fetchAndDisplaySelectedCollectionData(selectedCollection);
 }
 
 //! Function to fetch and display collections
 function fetchAndDisplayCollections() {
     //* Fetch collections from the backend
-    fetch('http://localhost:3000/get-all-collections')  
+    fetch(`${apiUrl}/get-all-collections`)  
         //* Parse the JSON response
         .then(response => response.json()) 
         .then(collections => {
@@ -64,7 +65,7 @@ function fetchAndDisplaySelectedCollectionData(collectionName) {
     }
 
     //* Fetch data from the backend for the selected collection
-    fetch(`http://localhost:3000/get-collection-data?collectionName=${collectionName}`)
+    fetch(`${apiUrl}get-collection-data?collectionName=${collectionName}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch collection data');

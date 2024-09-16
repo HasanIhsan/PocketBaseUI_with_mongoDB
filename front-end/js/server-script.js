@@ -68,6 +68,9 @@ function fetchAndDisplaySelectedCollectionData(collectionName) {
         return;
     }
 
+    //* Show the loading div
+    document.getElementById('loadingDiv').style.display = 'block';
+
     //* Fetch data from the backend for the selected collection
     fetch(`${apiUrl}/get-collection-data?collectionName=${collectionName}`)
         .then(response => {
@@ -79,11 +82,13 @@ function fetchAndDisplaySelectedCollectionData(collectionName) {
         .then(data => {
             //* Log the fetched data (you will implement display later)
             console.log(`Data for collection: ${collectionName}`, data);
+            document.getElementById('loadingDiv').style.display = 'none';
 
             // Now dynamically update the table based on the fetched data
             displayCollectionData(data.data, collectionName);
         })
         .catch(error => {
+            document.getElementById('loadingDiv').style.display = 'none';
             console.error('Error fetching collection data:', error);
     });
 }

@@ -124,7 +124,28 @@ function displayCollectionData(documents, collectionName) {
     documents.forEach(doc => {
         let rowHTML = `<tr><th><input type="checkbox" class="record-checkbox"></th>`;
         keys.forEach(key => {
-            rowHTML += `<td>${doc[key] || 'N/A'}</td>`;  
+            const value = doc[key];
+            
+            //* Check if the key is related to image data (assuming it's stored as a sub-document)
+            //? Currently if i was creating database to store images i would use, imagename, contentType, data to save the image
+            //? but not everyone does it this way...
+            //TODO: Later in the future change this so it isn't looking for specific value types like filename, contentType, data 
+            //TODO: Rather it looks to see if image data is there and uses that! (for now this works)
+            if (
+                typeof value === "object" &&
+                value !== null &&
+                value.filename &&
+                value.contentType &&
+                value.data
+            ) {
+                // If base64 image data is found, generate an <img> tag
+                const imageSrc = `data:${value.contentType};base64,${value.data}`;
+                rowHTML += `<td><img src="${imageSrc}" alt="${value.filename}" width="50" height="50"></td>`;
+            } else {
+                // Otherwise, show the value or 'N/A' if it's null/undefined
+                rowHTML += `<td>${value || "N/A"}</td>`;
+            }
+
         });
         rowHTML += `<td><img src="./Assets/images/arrow-icon.png" alt="Action Menu"></td></tr>`;
         tableBody.innerHTML += rowHTML;
@@ -133,3 +154,4 @@ function displayCollectionData(documents, collectionName) {
 
 //* Call the function when the page loads
 window.onload = fetchAndDisplayCollections;
+ 

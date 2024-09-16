@@ -48,6 +48,10 @@ function fetchAndDisplayCollections() {
                 collectionDiv.addEventListener('click', function () {
                     //* Set the selected collection
                     setSelectedCollection(collection.name);
+
+                    //* setting the header lable to coorespond with the selected collection
+                    const collectionNameHeader = document.getElementById('collection-header-name');
+                    collectionNameHeader.innerText = `Collections / ${collection.name}`;
                 });
             });
         })
@@ -65,7 +69,7 @@ function fetchAndDisplaySelectedCollectionData(collectionName) {
     }
 
     //* Fetch data from the backend for the selected collection
-    fetch(`${apiUrl}get-collection-data?collectionName=${collectionName}`)
+    fetch(`${apiUrl}/get-collection-data?collectionName=${collectionName}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch collection data');
@@ -75,12 +79,57 @@ function fetchAndDisplaySelectedCollectionData(collectionName) {
         .then(data => {
             //* Log the fetched data (you will implement display later)
             console.log(`Data for collection: ${collectionName}`, data);
+
+            // Now dynamically update the table based on the fetched data
+            displayCollectionData(data.data, collectionName);
         })
         .catch(error => {
             console.error('Error fetching collection data:', error);
     });
 }
- 
+
+//! Function to display the selected collection data dynamically
+function displayCollectionData(documents, collectionName) {
+    const table = document.querySelector('.content-table table');
+    const tableHead = table.querySelector('thead tr');
+    const tableBody = table.querySelector('tbody');
+    const collectionDataCount = document.getElementById('total-found');
+    
+    //* Clear any existing table headers and rows
+    tableHead.innerHTML = '';
+    tableBody.innerHTML = '';
+
+    //* If no documents are available, show a message
+    if (documents.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="100%">No data available for this collection</td></tr>`;
+        collectionDataCount.innerHTML = `Total found: 0`;
+        return;
+    }else {
+        collectionDataCount.innerHTML = `Total found: ${documents.length}`;
+    }
+
+    //* Dynamically generate table headers based on the keys of the first document
+    const firstDoc = documents[0];
+    const keys = Object.keys(firstDoc);
+
+    //* Add the checkbox and dynamic headers to the <thead>
+    let headerRowHTML = `<th><input type="checkbox" class="record-checkbox"></th>`;
+    keys.forEach(key => {
+        headerRowHTML += `<th>${key}</th>`;
+    });
+    headerRowHTML += `<th><img class="dot-icon" src="./Assets/images/dot-logo.png" alt="Action Menu"></th>`;
+    tableHead.innerHTML = headerRowHTML;
+
+    //* Dynamically generate table rows for each document
+    documents.forEach(doc => {
+        let rowHTML = `<tr><th><input type="checkbox" class="record-checkbox"></th>`;
+        keys.forEach(key => {
+            rowHTML += `<td>${doc[key] || 'N/A'}</td>`;  
+        });
+        rowHTML += `<td><img src="./Assets/images/arrow-icon.png" alt="Action Menu"></td></tr>`;
+        tableBody.innerHTML += rowHTML;
+    });
+}
 
 //* Call the function when the page loads
 window.onload = fetchAndDisplayCollections;

@@ -99,7 +99,7 @@ function displayCollectionData(documents, collectionName) {
     const tableHead = table.querySelector('thead tr');
     const tableBody = table.querySelector('tbody');
     const collectionDataCount = document.getElementById('total-found');
-    
+
     //* Clear any existing table headers and rows
     tableHead.innerHTML = '';
     tableBody.innerHTML = '';
@@ -109,7 +109,7 @@ function displayCollectionData(documents, collectionName) {
         tableBody.innerHTML = `<tr><td colspan="100%">No data available for this collection</td></tr>`;
         collectionDataCount.innerHTML = `Total found: 0`;
         return;
-    }else {
+    } else {
         collectionDataCount.innerHTML = `Total found: ${documents.length}`;
     }
 
@@ -127,15 +127,12 @@ function displayCollectionData(documents, collectionName) {
 
     //* Dynamically generate table rows for each document
     documents.forEach(doc => {
-        let rowHTML = `<tr><th><input type="checkbox" class="record-checkbox"></th>`;
+        let rowHTML = `<tr class="data-row" data-id="${doc._id}"><th><input type="checkbox" class="record-checkbox"></th>`;
+        
         keys.forEach(key => {
             const value = doc[key];
             
             //* Check if the key is related to image data (assuming it's stored as a sub-document)
-            //? Currently if i was creating database to store images i would use, imagename, contentType, data to save the image
-            //? but not everyone does it this way...
-            //TODO: Later in the future change this so it isn't looking for specific value types like filename, contentType, data 
-            //TODO: Rather it looks to see if image data is there and uses that! (for now this works)
             if (
                 typeof value === "object" &&
                 value !== null &&
@@ -150,12 +147,27 @@ function displayCollectionData(documents, collectionName) {
                 // Otherwise, show the value or 'N/A' if it's null/undefined
                 rowHTML += `<td>${value || "N/A"}</td>`;
             }
-
         });
+
         rowHTML += `<td><img src="./Assets/images/arrow-icon.png" alt="Action Menu"></td></tr>`;
         tableBody.innerHTML += rowHTML;
     });
+
+    //* Add click event listeners to all rows to log the _id
+    const rows = tableBody.querySelectorAll('.data-row');
+    rows.forEach(row => {
+        row.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            updateCollectionData(id);
+        });
+    });
 }
+
+function updateCollectionData(dataId) {
+    console.log(`Clicked row with _id: ${dataId}`);
+
+}
+
 
 //* Call the function when the page loads
 window.onload = fetchAndDisplayCollections;

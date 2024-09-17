@@ -159,7 +159,7 @@ function displayCollectionData(documents, collectionName) {
         row.addEventListener('click', function() {
             event.stopPropagation(); //? Prevent the click event from reaching the document
             const id = this.getAttribute('data-id');
-            updateCollectionData(id);
+            updateCollectionData(collectionName, id);
         });
     });
 }
@@ -177,7 +177,7 @@ document.addEventListener('click', function(event) {
 });
 
 //! Function to Update the Selected Data
-function updateCollectionData(dataId) {
+function updateCollectionData(collectionName, dataId) {
     console.log(`Clicked row with _id: ${dataId}`);
 
     //* Show the info panel
@@ -187,11 +187,27 @@ function updateCollectionData(dataId) {
     infoPanel.classList.remove('hidden');
 
 
-    //* Fectch the document data
-    
+    //* Fectch the document data  
+    fetch(`${apiUrl}/get-cdocument-data-by-id?collectionName=${collectionName}&id=${dataId}`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch document data.');
+        }
+        return response.json();
+    })
+    .then(data => { 
 
+        //* Optionally, you can handle displaying this data in the UI
+        displayDocumentData(data);  //? You can create this function to dynamically update your UI
+    })
+    .catch(error => {
+        console.error('Error fetching document data:', error);
+    });
 }
 
+function displayDocumentData(data) {
+    console.log('Document Data:', data);
+}
 
 //* Call the function when the page loads
 window.onload = fetchAndDisplayCollections;

@@ -179,13 +179,7 @@ document.addEventListener('click', function(event) {
 //! Function to Update the Selected Data
 function updateCollectionData(collectionName, dataId) {
     console.log(`Clicked row with _id: ${dataId}`);
-
-    //* Show the info panel
-    const infoPanel = document.getElementById('info-panel');
-    infoPanel.innerHTML = `<p>Loading data for _id: ${dataId}...</p>`;
-    infoPanel.style.display = 'block';
-    infoPanel.classList.remove('hidden');
-
+  
 
     //* Fectch the document data  
     fetch(`${apiUrl}/get-cdocument-data-by-id?collectionName=${collectionName}&id=${dataId}`)
@@ -198,15 +192,107 @@ function updateCollectionData(collectionName, dataId) {
     .then(data => { 
 
         //* Optionally, you can handle displaying this data in the UI
-        displayDocumentData(data);  //? You can create this function to dynamically update your UI
+        displayDocumentData(data.data);  //? You can create this function to dynamically update your UI
     })
     .catch(error => {
         console.error('Error fetching document data:', error);
     });
 }
 
-function displayDocumentData(data) {
-    console.log('Document Data:', data);
+//! Function to dynamically create a form based on document data
+function displayDocumentData(documentData) {
+    const infoPanel = document.getElementById('info-panel');
+
+    //* Clear previous content
+    infoPanel.innerHTML = '';
+
+    //* Create a form element
+    const form = document.createElement('form');
+    form.setAttribute('id', 'dynamic-form');
+
+    //* Iterate over the keys in the data object
+    Object.keys(documentData).forEach(key => {
+        const value = documentData[key];
+
+        //* Create a form group for each key-value pair
+        const formGroup = document.createElement('div');
+        formGroup.classList.add('form-group');
+
+        //* Create a label for the form field
+        const label = document.createElement('label');
+        label.innerText = key;
+        formGroup.appendChild(label);
+
+        //* Handle _id field (non-editable)
+        if (key === '_id') {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'text');
+            input.setAttribute('value', value);
+            input.setAttribute('readonly', true);  // Make it non-editable
+            formGroup.appendChild(input);
+        } else if (typeof value === 'object' && value !== null && value.data && value.contentType) {
+            // If the field is an image, show the image preview
+            const img = document.createElement('img');
+            img.src = `data:${value.contentType};base64,${value.data}`;
+            img.alt = value.filename || 'image';
+            img.style.width = '100px';  // You can adjust the size as needed
+            formGroup.appendChild(img);
+
+            // Create a file input for uploading a new image
+            const fileInput = document.createElement('input');
+            fileInput.setAttribute('type', 'file');
+            fileInput.setAttribute('accept', 'image/*');  // Only allow image uploads
+            fileInput.style.marginLeft = '10px';  // Add some spacing between the image and file input
+
+            //* Handle file selection
+            fileInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = function() {
+                        // Show a preview of the selected image
+                        img.src = reader.result;
+                        img.alt = file.name;
+                    };
+                    reader.readAsDataURL(file);  // Read the file as base64
+                }
+            });
+
+            formGroup.appendChild(fileInput);  // Add the file input to the form group
+        } else {
+            // Otherwise, create an input field for editable data
+            const input = document.createElement('input');
+            input.setAttribute('type', 'text');
+            input.setAttribute('name', key);
+            input.setAttribute('value', value || '');  // Show 'N/A' if the value is null/undefined
+            formGroup.appendChild(input);
+        }
+
+        //* Append the form group to the form
+        form.appendChild(formGroup);
+    });
+
+    //* Add submit button (if needed)
+    const submitButton = document.createElement('button');
+    submitButton.innerText = 'Submit';
+    submitButton.setAttribute('type', 'submit');
+    form.appendChild(submitButton);
+
+    //* Add cancel button (optional, to close the form)
+    const cancelButton = document.createElement('button');
+    cancelButton.innerText = 'Cancel';
+    cancelButton.setAttribute('type', 'button');
+    cancelButton.onclick = function () {
+        infoPanel.classList.add('hidden');  // Hide the form
+    };
+    form.appendChild(cancelButton);
+
+    //* Append the form to the infoPanel
+    infoPanel.appendChild(form);
+
+    //* Show the panel
+    infoPanel.style.display = 'block';
+    infoPanel.classList.remove('hidden');
 }
 
 //* Call the function when the page loads

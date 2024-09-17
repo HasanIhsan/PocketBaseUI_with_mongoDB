@@ -263,6 +263,201 @@ tbody td:last-child img {
     text-align: right;
 }
 
+/* Style the form and input fields */
+#dynamic-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Section labels (like Account or Authorized Providers) */
+.section-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Group styling for form sections */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    background-color: #f1f3f5;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e2e6ea;
+}
+
+label {
+    font-size: 14px;
+    font-weight: normal;
+    color: #6c757d;
+    margin-bottom: 5px;
+    padding-left: 10px;
+    padding-top: 5px;
+}
+
+/* Input styling */
+input[type="text"], input[type="email"], input[type="password"] {
+    padding: 12px;
+    border: 1px solid #e2e6ea;
+    border-radius: 8px;
+    width: 100%;
+    background-color: #f1f3f5;
+    font-size: 14px;
+    color: #495057;
+}
+
+/* Disabled fields styling */
+input[readonly] {
+    background-color: #e9ecef;
+    border: none;
+}
+
+/* Button styling */
+button {
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: fit-content;
+}
+
+button[type="button"] {
+    background-color: #6c757d;  /* Grey for cancel */
+}
+
+button:disabled {
+    background-color: #adb5bd;
+}
+
+/* Toggle switch styling */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: 0.4s;
+}
+
+input:checked + .slider {
+    background-color: #28a745;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+/* General styling for the toggle label */
+.toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #495057;
+}
+
+/* File input styling */
+.file-upload {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f1f3f5;
+    border: 1px dashed #adb5bd;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.file-upload input[type="file"] {
+    display: none;  /* Hide the default file input */
+}
+
+/* Style the Save Changes button */
+.save-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+    background-color: #0056b3;
+}
+
+/* Style the Cancel button */
+.cancel-button {
+    background-color: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cancel-button:hover {
+    background-color: #5a6268;
+}
+
+/* Adjusting input field styles to be consistent across */
+input, textarea, select {
+    background-color: #f1f3f5;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 14px;
+    color: #495057;
+}
+
+/*-----------------------------------------*/
 
 /* Style for the right-side div */
 #info-panel {

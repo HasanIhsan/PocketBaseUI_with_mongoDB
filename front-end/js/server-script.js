@@ -140,11 +140,11 @@ function displayCollectionData(documents, collectionName) {
                 value.contentType &&
                 value.data
             ) {
-                // If base64 image data is found, generate an <img> tag
+                //* If base64 image data is found, generate an <img> tag
                 const imageSrc = `data:${value.contentType};base64,${value.data}`;
                 rowHTML += `<td><img src="${imageSrc}" alt="${value.filename}" width="50" height="50"></td>`;
             } else {
-                // Otherwise, show the value or 'N/A' if it's null/undefined
+                //* Otherwise, show the value or 'N/A' if it's null/undefined
                 rowHTML += `<td>${value || "N/A"}</td>`;
             }
         });
@@ -157,14 +157,37 @@ function displayCollectionData(documents, collectionName) {
     const rows = tableBody.querySelectorAll('.data-row');
     rows.forEach(row => {
         row.addEventListener('click', function() {
+            event.stopPropagation(); //? Prevent the click event from reaching the document
             const id = this.getAttribute('data-id');
             updateCollectionData(id);
         });
     });
 }
 
+//! Function to hide the info panel when clicking outside of it
+document.addEventListener('click', function(event) {
+    const infoPanel = document.getElementById('info-panel');
+    
+    //* Check if the click happened outside the info panel
+    if (!infoPanel.contains(event.target) && !event.target.closest('tr')) {
+        infoPanel.classList.add('hidden');
+        infoPanel.style.display = 'none'; //? Explicitly hide the panel
+        console.log("hidden");
+    }
+});
+
+//! Function to Update the Selected Data
 function updateCollectionData(dataId) {
     console.log(`Clicked row with _id: ${dataId}`);
+
+    // Show the info panel
+    const infoPanel = document.getElementById('info-panel');
+    infoPanel.innerHTML = `<p>Loading data for _id: ${dataId}...</p>`;
+    infoPanel.style.display = 'block';
+    infoPanel.classList.remove('hidden');
+
+
+
 
 }
 

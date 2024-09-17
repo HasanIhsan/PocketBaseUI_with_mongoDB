@@ -264,6 +264,28 @@ tbody td:last-child img {
 }
 
 
+/* Style for the right-side div */
+#info-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 40%; /* Adjust the width as needed */
+    height: 100%;
+    background-color: #f9f9f9;
+    box-shadow: -3px 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Ensure it appears on top */
+    padding: 20px;
+     
+    overflow-y: auto; /* Add scrolling if content overflows */
+}
+
+/* Hidden class to hide the panel */
+.hidden {
+    display: none;
+}
+
+/*-------------------------------------------------*/
+
 /* css for image hover lable*/
 .image-container {
     position: relative;
@@ -298,6 +320,7 @@ tbody td:last-child img {
     visibility: visible;
     opacity: 1;
 }
+
 /*-----------------------------------------------*/
 
 /* Style for the bottom delete bar */

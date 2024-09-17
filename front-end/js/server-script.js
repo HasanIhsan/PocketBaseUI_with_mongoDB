@@ -180,14 +180,15 @@ document.addEventListener('click', function(event) {
 function updateCollectionData(dataId) {
     console.log(`Clicked row with _id: ${dataId}`);
 
-    // Show the info panel
+    //* Show the info panel
     const infoPanel = document.getElementById('info-panel');
     infoPanel.innerHTML = `<p>Loading data for _id: ${dataId}...</p>`;
     infoPanel.style.display = 'block';
     infoPanel.classList.remove('hidden');
 
 
-
+    //* Fectch the document data
+    
 
 }
 

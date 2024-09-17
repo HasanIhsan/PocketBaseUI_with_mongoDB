@@ -274,8 +274,7 @@ tbody td:last-child img {
     background-color: #f9f9f9;
     box-shadow: -3px 0 10px rgba(0, 0, 0, 0.2);
     z-index: 1000; /* Ensure it appears on top */
-    padding: 20px;
-     
+    padding: 20px; 
     overflow-y: auto; /* Add scrolling if content overflows */
 }
 

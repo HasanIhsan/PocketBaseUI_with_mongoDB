@@ -63,13 +63,13 @@ app.get('/get-all-collections', async (req, res) => {
    
     try {
 
-        //? Connect to MongoDB if not already connected
+        //* Connect to MongoDB if not already connected
         if (!db) await connectToDB();
 
-        //? Get all Collections (tables)
+        //* Get all Collections (tables)
         const collections = await db.listCollections().toArray();
 
-        //? Send collection data as json
+        //* Send collection data as json
         res.json(collections);
 
     }catch(error) {
@@ -91,20 +91,20 @@ app.get('/get-collection-data', async (req, res) => {
 
     try {
 
-        //? Connect to db
+        //* Connect to db
         if(!db) await connectToDB();
 
-        //? Check if collection exists
+        //* Check if collection exists
         const collectionExists = await db.listCollections({ name: collectionName }).hasNext();
         if (!collectionExists) {
             return res.status(404).json({ error: 'Collection not found' });
         }
 
-        //? Get all documents from the selected collection
+        //* Get all documents from the selected collection
         const collection = db.collection(collectionName);
         const documents = await collection.find().toArray();
 
-        //? Send the documents as a response
+        //* Send the documents as a response
         res.json({ data: documents });
 
          
@@ -117,6 +117,45 @@ app.get('/get-collection-data', async (req, res) => {
 });
 
 
+//! Rouote to get a document info by id
+app.get('/get-cdocument-data-by-id', async (req, res) => {
+    const collectionName = req.query.collectionName;
+    const documentId = req.query.id;
+
+    //* Check if both collection name and document ID are provided
+    if (!collectionName || !documentId) {
+        return res.status(400).json({ error: 'Collection name and document ID are required' });
+    }
+
+    try {
+        //* Connect to the database if not already connected
+        if (!db) await connectToDB();
+
+        //* Check if collection exists
+        const collectionExists = await db.listCollections({ name: collectionName }).hasNext();
+        if (!collectionExists) {
+            return res.status(404).json({ error: 'Collection not found' });
+        }
+
+        //* Get the collection
+        const collection = db.collection(collectionName);
+
+        //* Find the document by its ID
+        const document = await collection.findOne({ _id: new ObjectId(documentId) });
+
+        //* If document not found, return an error
+        if (!document) {
+            return res.status(404).json({ error: 'Document not found' });
+        }
+
+        //* Return the document as JSON
+        res.json({ data: document });
+
+    } catch (error) {
+        console.error('Error fetching document:', error);
+        res.status(500).json({ error: 'Failed to fetch document' });
+    }
+});
 
 app.listen(port, () => {
   console.log(`Proxy server running at http://localhost:${port}`);

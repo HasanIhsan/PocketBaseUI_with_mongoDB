@@ -157,6 +157,55 @@ app.get('/get-cdocument-data-by-id', async (req, res) => {
     }
 });
 
+//! Update selected data by id and collectionName
+app.put('/update-selected-data', async (req, res) => {
+    const collectionName = req.query.collectionName;
+    const documentId = req.query.id;
+
+    //* Check if both collection name and document ID are provided
+    if (!collectionName || !documentId) {
+        return res.status(400).json({ error: 'Collection name and document ID are required' });
+    }
+
+    //* Get the data to update from the request body
+    const updatedData = req.body;
+
+    try {
+        //* Connect to the database if not already connected
+        if (!db) await connectToDB();
+
+        //* Check if the collection exists
+        const collectionExists = await db.listCollections({ name: collectionName }).hasNext();
+        if (!collectionExists) {
+            return res.status(404).json({ error: 'Collection not found' });
+        }
+
+        //* Remove _id from updatedData to prevent trying to update the immutable field
+        delete updatedData._id;
+
+        //* Get the collection
+        const collection = db.collection(collectionName);
+
+        //* Perform the update
+        const result = await collection.updateOne(
+            { _id: new ObjectId(documentId) },  // Filter by document ID
+            { $set: updatedData }  // Update with new data
+        );
+
+        //* If no document was modified, return a 404
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: 'Document not found' });
+        }
+
+        //* Respond with success if document was updated
+        return res.status(200).json({ message: 'Document updated successfully' });
+
+    } catch (error) {
+        console.error('Error updating document:', error);
+        res.status(500).json({ error: 'Failed to update document' });
+    }
+});
+
 app.listen(port, () => {
   console.log(`Proxy server running at http://localhost:${port}`);
 });

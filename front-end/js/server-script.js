@@ -295,6 +295,10 @@ function displayDocumentData(documentData) {
     infoPanel.classList.remove('hidden');
 }
 
+function updateSelectedData(Collectionname) {
+    
+}
+
 //* Call the function when the page loads
 window.onload = fetchAndDisplayCollections;
  

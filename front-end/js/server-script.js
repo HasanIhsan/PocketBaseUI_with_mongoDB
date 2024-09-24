@@ -192,7 +192,7 @@ function updateCollectionData(collectionName, dataId) {
     .then(data => { 
 
         //* Optionally, you can handle displaying this data in the UI
-        displayDocumentData(data.data);  //? You can create this function to dynamically update your UI
+        displayDocumentData(data.data, collectionName, dataId);  //? You can create this function to dynamically update your UI
     })
     .catch(error => {
         console.error('Error fetching document data:', error);
@@ -200,7 +200,7 @@ function updateCollectionData(collectionName, dataId) {
 }
 
 //! Function to dynamically create a form based on document data
-function displayDocumentData(documentData) {
+function displayDocumentData(documentData, collectionName, dataId) {
     const infoPanel = document.getElementById('info-panel');
 
     //* Clear previous content
@@ -228,21 +228,23 @@ function displayDocumentData(documentData) {
             const input = document.createElement('input');
             input.setAttribute('type', 'text');
             input.setAttribute('value', value);
-            input.setAttribute('readonly', true);  // Make it non-editable
+            input.setAttribute('readonly', true);  //? Make it non-editable
             formGroup.appendChild(input);
+           
+            //TODO: update the image detection so later it can detect a image without having to look for hardcoded labels (like contentType, or data)
         } else if (typeof value === 'object' && value !== null && value.data && value.contentType) {
-            // If the field is an image, show the image preview
+            //* If the field is an image, show the image preview
             const img = document.createElement('img');
             img.src = `data:${value.contentType};base64,${value.data}`;
             img.alt = value.filename || 'image';
-            img.style.width = '100px';  // You can adjust the size as needed
+            img.style.width = '100px';  //? You can adjust the size as needed
             formGroup.appendChild(img);
 
-            // Create a file input for uploading a new image
+            //* Create a file input for uploading a new image
             const fileInput = document.createElement('input');
             fileInput.setAttribute('type', 'file');
-            fileInput.setAttribute('accept', 'image/*');  // Only allow image uploads
-            fileInput.style.marginLeft = '10px';  // Add some spacing between the image and file input
+            fileInput.setAttribute('accept', 'image/*');  //? Only allow image uploads
+            fileInput.style.marginLeft = '10px';  //? Add some spacing between the image and file input
 
             //* Handle file selection
             fileInput.addEventListener('change', function(event) {
@@ -250,21 +252,21 @@ function displayDocumentData(documentData) {
                 if (file) {
                     const reader = new FileReader();
                     reader.onloadend = function() {
-                        // Show a preview of the selected image
+                        //* Show a preview of the selected image
                         img.src = reader.result;
                         img.alt = file.name;
                     };
-                    reader.readAsDataURL(file);  // Read the file as base64
+                    reader.readAsDataURL(file);  //? Read the file as base64
                 }
             });
 
-            formGroup.appendChild(fileInput);  // Add the file input to the form group
+            formGroup.appendChild(fileInput);  //? Add the file input to the form group
         } else {
-            // Otherwise, create an input field for editable data
+            //* Otherwise, create an input field for editable data
             const input = document.createElement('input');
             input.setAttribute('type', 'text');
             input.setAttribute('name', key);
-            input.setAttribute('value', value || '');  // Show 'N/A' if the value is null/undefined
+            input.setAttribute('value', value || '');  //? Show 'N/A' if the value is null/undefined
             formGroup.appendChild(input);
         }
 
@@ -273,17 +275,24 @@ function displayDocumentData(documentData) {
     });
 
     //* Add submit button (if needed)
+    /// note: did need this to update infomation
     const submitButton = document.createElement('button');
     submitButton.innerText = 'Submit';
     submitButton.setAttribute('type', 'submit');
     form.appendChild(submitButton);
 
+    //* adding a Submit button event listner
+    submitButton.addEventListener('click', function() {
+        updateSelectedData(dataId, collectionName )
+    })
     //* Add cancel button (optional, to close the form)
     const cancelButton = document.createElement('button');
     cancelButton.innerText = 'Cancel';
     cancelButton.setAttribute('type', 'button');
+
+    //TODO: FIX THE CANCEL BUTTON IT DOESN'T WORK
     cancelButton.onclick = function () {
-        infoPanel.classList.add('hidden');  // Hide the form
+        infoPanel.classList.add('hidden');  //? Hide the form
     };
     form.appendChild(cancelButton);
 
@@ -295,8 +304,50 @@ function displayDocumentData(documentData) {
     infoPanel.classList.remove('hidden');
 }
 
-function updateSelectedData(Collectionname) {
-    
+//! Function to update a selected data
+//TODO: Fix a Bug where it says its failed to fetch (but updates all data correctly with no errors)
+//TODO: NOTE I tried to get images to update.. (that didn't work... so figure out a way so images can also update)
+//*     again all i can think of is to first check if there is an image if there is then update that existing image...
+function updateSelectedData(dataId, collectionName) {
+    //* Get the form element
+    const form = document.getElementById('dynamic-form');
+
+    //* Use FormData to collect form inputs and handle file uploads
+    const formData = new FormData(form);
+
+    //* Make the PUT request to update the data
+    fetch(`${apiUrl}/update-selected-data?collectionName=${collectionName}&id=${dataId}`, {
+        method: 'PUT',
+        body: formData,  //? FormData is used to support file uploads
+    })
+    .then(response => {
+        //* Check if the response content type is JSON before parsing
+        const contentType = response.headers.get('content-type');
+        
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        
+        if (contentType && contentType.includes('application/json')) {
+            return response.json();
+        } else {
+            //* If the response is not JSON, return an empty object or custom message
+            return {};
+        }
+    })
+    .then(data => {
+        if (data.error) {
+            console.error('Error updating document:', data.error);
+            alert('Failed to update document: ' + data.error);
+        } else {
+            alert('Document updated successfully!');
+            //? Optionally, you can close the form or refresh the page to show updated data
+        }
+    })
+    .catch(error => {
+        console.error('Error during fetch:', error);
+        alert('An error occurred: ' + error);
+    });
 }
 
 //* Call the function when the page loads

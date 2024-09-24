@@ -5,6 +5,10 @@ const app = express();
 const port = 3000;
 //const router = express.Router();
 
+const multer = require('multer');
+const upload = multer();  //? Initialize multer (with memory storage, or you can customize for disk storage)
+
+
 require('dotenv').config()
 
 let db;
@@ -158,7 +162,8 @@ app.get('/get-cdocument-data-by-id', async (req, res) => {
 });
 
 //! Update selected data by id and collectionName
-app.put('/update-selected-data', async (req, res) => {
+//TODO: FIX: image upload cause it doesn't work!
+app.put('/update-selected-data', upload.any(), async (req, res) => {
     const collectionName = req.query.collectionName;
     const documentId = req.query.id;
 
@@ -166,9 +171,6 @@ app.put('/update-selected-data', async (req, res) => {
     if (!collectionName || !documentId) {
         return res.status(400).json({ error: 'Collection name and document ID are required' });
     }
-
-    //* Get the data to update from the request body
-    const updatedData = req.body;
 
     try {
         //* Connect to the database if not already connected
@@ -180,16 +182,37 @@ app.put('/update-selected-data', async (req, res) => {
             return res.status(404).json({ error: 'Collection not found' });
         }
 
-        //* Remove _id from updatedData to prevent trying to update the immutable field
-        delete updatedData._id;
-
         //* Get the collection
         const collection = db.collection(collectionName);
 
+        //* Construct updated data
+        let updatedData = {};
+
+        //* Iterate over req.body (form fields)
+        //TODO: It says that objectId is depricated... but this code works fine 9/23/2024... (so if it breaks i'll fix it then)
+        Object.entries(req.body).forEach(([key, value]) => {
+            //* Convert to ObjectId if the key contains "id" (you can adjust this to match specific fields)
+            if (key.toLowerCase().includes('id') && value.match(/^[0-9a-fA-F]{24}$/)) {
+                updatedData[key] = new ObjectId(value); //? Convert to ObjectId
+            } else {
+                updatedData[key] = value; //? Keep as string or other data types
+            }
+        });
+
+        //* If there's a file upload, handle the file here
+        if (req.files && req.files.length > 0) {
+            const file = req.files[0];  //? Assuming a single file upload
+            updatedData.file = {
+                data: file.buffer.toString('base64'),  //? Convert buffer to base64
+                contentType: file.mimetype,
+                filename: file.originalname
+            };
+        }
+
         //* Perform the update
         const result = await collection.updateOne(
-            { _id: new ObjectId(documentId) },  // Filter by document ID
-            { $set: updatedData }  // Update with new data
+            { _id: new ObjectId(documentId) },  //? Filter by document ID
+            { $set: updatedData }  //? Update with new data
         );
 
         //* If no document was modified, return a 404
@@ -197,7 +220,7 @@ app.put('/update-selected-data', async (req, res) => {
             return res.status(404).json({ error: 'Document not found' });
         }
 
-        //* Respond with success if document was updated
+        //* Respond with success if the document was updated
         return res.status(200).json({ message: 'Document updated successfully' });
 
     } catch (error) {
@@ -205,6 +228,7 @@ app.put('/update-selected-data', async (req, res) => {
         res.status(500).json({ error: 'Failed to update document' });
     }
 });
+
 
 app.listen(port, () => {
   console.log(`Proxy server running at http://localhost:${port}`);

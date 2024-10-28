@@ -370,26 +370,29 @@ deleteButton.addEventListener('click', function() {
     // For demonstration purposes, just log the selected IDs
     console.log('Selected IDs for deletion:', selectedIds);
 
+    
     document.getElementById('loadingDiv').style.display = 'block';
 
-    // Send a delete request to the backend with the selected IDs
     fetch(`${apiUrl}/delete-selected-data?collectionName=${selectedCollection}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(selectedIds)
+        body: JSON.stringify(selectedIds)  
     })
-    .then(response =>  { 
-        response.json()
+    .then(response => {
         document.getElementById('loadingDiv').style.display = 'none';
+        return response.json(); // Ensure this is returned to pass data to the next `then`
     })
     .then(data => {
-        if (data.error) {
+        if (data && data.error) { // Check for `data` existence before accessing `data.error`
             alert('Failed to delete records: ' + data.error);
         } else {
-            alert(`${data.message}`);
-            // Optionally, refresh the data display or remove deleted rows from the table
+            alert(`${data.message || 'Records deleted successfully'}`);
+            
+            //* Optionally, refresh the data display or remove deleted rows from the table
+            fetchAndDisplaySelectedCollectionData(selectedCollection);
+
         }
     })
     .catch(error => {
@@ -397,10 +400,11 @@ deleteButton.addEventListener('click', function() {
         alert('An error occurred while deleting records');
     });
 
-    // Uncheck all checkboxes after deletion and update the bar
+    //* Uncheck all checkboxes after deletion and update the bar
     selectedCheckboxes.forEach(checkbox => checkbox.checked = false);
     updateDeleteBar(); // Hide the bar after deletion
 });
+
 
  
 

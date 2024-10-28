@@ -233,6 +233,12 @@ app.put('/update-selected-data', upload.any(), async (req, res) => {
 //* the input is a array and every id in that array gets deleted! 
 //* NOTE: this function does not work with FK's only deletes data from a seleted collection (if a data has a FK that FK will NOT be deleted)
 //TODO: FIX DELETE SO IT DELETES FK's
+
+/* EX:
+{
+    "ids": ["66f1b4f1a28be076bd834218", "66e46cc0ed198796b78caee4"]
+}
+*/
 app.delete('/delete-selected-data', async (req, res) => {
     const collectionName = req.query.collectionName;
     const ids = req.body.ids;  // Expecting an array of IDs in the request body

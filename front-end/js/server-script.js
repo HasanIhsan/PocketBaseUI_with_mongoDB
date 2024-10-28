@@ -156,8 +156,14 @@ function displayCollectionData(documents, collectionName) {
     //* Add click event listeners to all rows to log the _id
     const rows = tableBody.querySelectorAll('.data-row');
     rows.forEach(row => {
-        row.addEventListener('click', function() {
-            event.stopPropagation(); //? Prevent the click event from reaching the document
+        row.addEventListener('click', function(event) {
+            // Check if the click target is a checkbox
+            if (event.target.classList.contains('record-checkbox')) {
+                // Let the checkbox handle its own event (e.g., updating the delete bar)
+                return;
+            }
+            
+            // If click is not on a checkbox, open the info panel
             const id = this.getAttribute('data-id');
             updateCollectionData(collectionName, id);
         });

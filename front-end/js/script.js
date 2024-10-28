@@ -28,10 +28,12 @@ const deleteButton = document.getElementById('delete-button');
 function updateDeleteBar() {
     const selectedCheckboxes = document.querySelectorAll('.record-checkbox:checked');
     const numSelected = selectedCheckboxes.length;
+    console.log("method called!");
 
     if (numSelected > 0) {
         //? Show the delete bar and update the count
         deleteBar.style.display = 'block';
+        console.log("selected checkbox!");
         selectedCountSpan.textContent = `Selected (${numSelected}) record(s)`;
     } else {
         //? Hide the delete bar if no checkboxes are selected

@@ -229,6 +229,51 @@ app.put('/update-selected-data', upload.any(), async (req, res) => {
     }
 });
 
+//! Function to delete data 
+//* the input is a array and every id in that array gets deleted! 
+//* NOTE: this function does not work with FK's only deletes data from a seleted collection (if a data has a FK that FK will NOT be deleted)
+//TODO: FIX DELETE SO IT DELETES FK's
+app.delete('/delete-selected-data', async (req, res) => {
+    const collectionName = req.query.collectionName;
+    const ids = req.body.ids;  // Expecting an array of IDs in the request body
+
+    //* Check if both collection name and IDs array are provided
+    if (!collectionName || !Array.isArray(ids) || ids.length === 0) {
+        return res.status(400).json({ error: 'Collection name and an array of IDs are required' });
+    }
+
+    try {
+        //* Connect to the database if not already connected
+        if (!db) await connectToDB();
+
+        //* Check if the collection exists
+        const collectionExists = await db.listCollections({ name: collectionName }).hasNext();
+        if (!collectionExists) {
+            return res.status(404).json({ error: 'Collection not found' });
+        }
+
+        //* Get the collection
+        const collection = db.collection(collectionName);
+
+        //* Convert each ID in the array to an ObjectId
+        const objectIds = ids.map(id => new ObjectId(id));
+
+        //* Delete documents that match any of the IDs in the array
+        const result = await collection.deleteMany({ _id: { $in: objectIds } });
+
+        //* Check if any documents were deleted
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ error: 'No documents found with the specified IDs' });
+        }
+
+        //* Respond with success message and number of documents deleted
+        return res.status(200).json({ message: `${result.deletedCount} document(s) deleted successfully` });
+
+    } catch (error) {
+        console.error('Error deleting documents:', error);
+        res.status(500).json({ error: 'Failed to delete documents' });
+    }
+});
 
 app.listen(port, () => {
   console.log(`Proxy server running at http://localhost:${port}`);

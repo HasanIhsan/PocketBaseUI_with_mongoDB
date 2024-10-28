@@ -362,6 +362,49 @@ function updateSelectedData(dataId, collectionName) {
     });
 }
 
+//! Delete button functionality
+deleteButton.addEventListener('click', function() {
+    const selectedCheckboxes = document.querySelectorAll('.record-checkbox:checked');
+    const selectedIds = getSelectedIds(); // Get the IDs of selected rows
+
+    // For demonstration purposes, just log the selected IDs
+    console.log('Selected IDs for deletion:', selectedIds);
+
+    document.getElementById('loadingDiv').style.display = 'block';
+
+    // Send a delete request to the backend with the selected IDs
+    fetch(`${apiUrl}/delete-selected-data?collectionName=${selectedCollection}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(selectedIds)
+    })
+    .then(response =>  { 
+        response.json()
+        document.getElementById('loadingDiv').style.display = 'none';
+    })
+    .then(data => {
+        if (data.error) {
+            alert('Failed to delete records: ' + data.error);
+        } else {
+            alert(`${data.message}`);
+            // Optionally, refresh the data display or remove deleted rows from the table
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting records:', error);
+        alert('An error occurred while deleting records');
+    });
+
+    // Uncheck all checkboxes after deletion and update the bar
+    selectedCheckboxes.forEach(checkbox => checkbox.checked = false);
+    updateDeleteBar(); // Hide the bar after deletion
+});
+
+ 
+
+
 //* Call the function when the page loads
 window.onload = fetchAndDisplayCollections;
  

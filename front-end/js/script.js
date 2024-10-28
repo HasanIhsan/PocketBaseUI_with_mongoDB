@@ -63,17 +63,4 @@ checkboxes.forEach(checkbox => {
     checkbox.addEventListener('change', updateDeleteBar);
 });
 
-//! Optional: Delete button functionality
-//TODO: Implment proper delete funcaationlity (with backend when can)
-deleteButton.addEventListener('click', function() {
-    const selectedCheckboxes = document.querySelectorAll('.record-checkbox:checked');
-    
-    // For demonstration purposes: just alert the number of selected records
-    alert(`Deleting ${selectedCheckboxes.length} selected record(s)`);
-
-    // Uncheck all checkboxes after deletion and update the bar
-    selectedCheckboxes.forEach(checkbox => checkbox.checked = false);
-    updateDeleteBar(); // Hide the bar after deletion
-});
-
  

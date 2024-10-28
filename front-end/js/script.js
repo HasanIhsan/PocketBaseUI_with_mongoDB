@@ -28,18 +28,35 @@ const deleteButton = document.getElementById('delete-button');
 function updateDeleteBar() {
     const selectedCheckboxes = document.querySelectorAll('.record-checkbox:checked');
     const numSelected = selectedCheckboxes.length;
-    console.log("method called!");
+    //console.log("method called!");
+
+    const selectedIds = getSelectedIds(); // Get the IDs of selected rows
 
     if (numSelected > 0) {
+        
+        console.log(selectedIds);
+        
+        //console.log("selected checkbox!");
         //? Show the delete bar and update the count
-        deleteBar.style.display = 'block';
-        console.log("selected checkbox!");
+        deleteBar.style.display = 'block'; 
         selectedCountSpan.textContent = `Selected (${numSelected}) record(s)`;
     } else {
         //? Hide the delete bar if no checkboxes are selected
         deleteBar.style.display = 'none';
     }
 }
+
+//! Function to get the IDs of selected rows
+function getSelectedIds() {
+    const selectedCheckboxes = document.querySelectorAll('.record-checkbox:checked');
+    const ids = Array.from(selectedCheckboxes).map(checkbox => {
+        // Get the parent row's data-id attribute
+        return checkbox.closest('tr').getAttribute('data-id');
+    });
+
+    return { ids: ids }; // Structure the data as required
+}
+
 
 //! Add event listeners to all checkboxes
 checkboxes.forEach(checkbox => {

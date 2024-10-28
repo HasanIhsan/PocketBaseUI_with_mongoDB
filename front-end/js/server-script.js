@@ -153,6 +153,12 @@ function displayCollectionData(documents, collectionName) {
         tableBody.innerHTML += rowHTML;
     });
 
+    //* Add event listeners to all checkboxes within the table body for dynamic data
+    const checkboxes = tableBody.querySelectorAll('.record-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateDeleteBar);
+    });
+
     //* Add click event listeners to all rows to log the _id
     const rows = tableBody.querySelectorAll('.data-row');
     rows.forEach(row => {
